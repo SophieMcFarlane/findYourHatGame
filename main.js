@@ -16,19 +16,14 @@ class Field {
   
   //method that prints the field
   print(){
-    var row1 ='';
-    for (let i=0; i < this._field[0].length; i++){
-      row1 += (this._field[0][i]);
+    var row='';
+    for (let i=0; i < height; i++){
+      for (let j=0; j< width; j++){
+        row +=this._field[i][j];
+      }
+      console.log(row);
+      row='';
     }
-    var row2='';
-    for (let i=0; i < this._field[1].length; i++){
-      row2 += (this._field[1][i]);
-    }
-    var row3='';
-    for (let i=0; i < this._field[2].length; i++){
-      row3 += (this._field[2][i]);
-    }
-    console.log(row1 + "\n" + row2 + "\n" + row3);
   }
   
   //method to change to character to the path character
@@ -194,8 +189,8 @@ function reset(){
 }
 
 //Initial method call
-const height = prompt ('What height would you like the field?');
-const width = prompt ('What width would you like the field?');
+var height = prompt ('What height would you like the field?');
+var width = prompt ('What width would you like the field?');
 const myField = new Field(Field.generateField(height, width));
 //Field.generateField(width, height);
 play();
