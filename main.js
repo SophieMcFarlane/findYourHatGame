@@ -61,7 +61,6 @@ class Field {
     while(hatGenerated  < 1){
         //check to see if there is already something in that spot
         if(this._field[randomY][randomX] === '*'){
-          console.log('already taken in hat');
           generateRandomX();
           generateRandomY();
         }else{
@@ -77,7 +76,6 @@ class Field {
       generateRandomX();
       generateRandomY();
       if(this._field[randomY][randomX] === '*' || this._field[randomY][randomX] === '^' || this._field[randomY][randomX] === 'O'){
-        console.log('already taken in hole');
         generateRandomY();
         generateRandomX();
       }else{
@@ -99,8 +97,6 @@ class Field {
         }
       }
     }
-    
-    console.log(this._field);
     return this._field;
   }
   
@@ -110,11 +106,11 @@ var currentLocation = [0, 0];
 var isPlaying = true;
 
 //The play function, take a parameter of a field
-function play(){
-  myField.print();
-  userInput();
+function play(newField){
+  newField.print();
+  userInput(newField);
   if(isPlaying == true){
-    userInput();
+    userInput(newField);
   }else if (isPlaying = false);{
     const playAgain = prompt('Do you want to play again? y or n?');
     if(playAgain === 'y'){
@@ -127,24 +123,24 @@ function play(){
 }
 
 //user input that asks for direction, updates the current location and calls testLocation
-function userInput(){
+function userInput(newField){
   const direction = prompt('Which way?');
   //if the player moves right
   if (direction === 'r'){
     currentLocation[0] += 1;
-    testLocation();
+    testLocation(newField);
   //if the player moves left
   }else if(direction === 'l'){
     currentLocation[0] -= 1;
-    testLocation();
+    testLocation(newField);
   //if the player moves up
   }else if(direction === 'u'){
     currentLocation[1] -= 1;
-    testLocation();
+    testLocation(newField);
   //if the player moves down
   }else if(direction === 'd'){
     currentLocation[1] += 1;
-    testLocation();
+    testLocation(newField);
   //if the player doesn't select a direction
   }else{
     console.log("That is not a valid input, please select 'l', 'r', 'u', 'd'");
@@ -153,14 +149,14 @@ function userInput(){
 }
 
 //testLocation function to see if the user has won/lost or whether to change the character
-function testLocation(){
+function testLocation(newField){
   var x = currentLocation[0];
   var y = currentLocation[1];
-  var field = myField.field;
-  if (y < 0 || y > 2){
+  var field = newField.field;
+  if (y < 0 || y > height){
     console.log('That is outside the field, you loose (');
     isPlaying = false;
-  }else if (x < 0 || x > 2){
+  }else if (x < 0 || x > width){
     console.log('That is outside the field, you loose (');
     isPlaying = false;
   }else if(field[y][x] === hat){
@@ -171,8 +167,8 @@ function testLocation(){
     isPlaying = false;
   }else{
     isPlaying = true;
-    myField.changeCharacter(x, y);
-    play(myField);
+    newField.changeCharacter(x, y);
+    play(newField);
   }
 }
 
@@ -180,17 +176,14 @@ function testLocation(){
 function reset(){
   isPlaying = true;
   currentLocation = [0, 0];
-  const myField = new Field([
-  ['*', '░', 'O'],
-  ['░', 'O', '░'],
-  ['░', '^', '░'],
-]);
-  play();
+  height = prompt ('What height would you like the field?');
+  width = prompt ('What width would you like the field?');
+  var myField = new Field(Field.generateField(height, width));
+  play(myField);
 }
 
 //Initial method call
 var height = prompt ('What height would you like the field?');
 var width = prompt ('What width would you like the field?');
-const myField = new Field(Field.generateField(height, width));
-//Field.generateField(width, height);
-play();
+var myField = new Field(Field.generateField(height, width));
+play(myField);
